@@ -15,6 +15,7 @@
     \usepackage{setspace}
     \usepackage{xcolor}
     \usepackage{tikz}
+    \usepackage{amsmath}
 
     \usepackage{hyperref}
         \hypersetup{colorlinks=false, pdfnewwindow=true}
@@ -76,6 +77,15 @@
     Likewise, the student must implement the articulated trajectory for cubic polynomials and display the student initials with the robot tool.
     
     \section{Development}
+    For this project I have select a 3-DoF RPP Robot. This robot have a rotative link and 2 prismatic links, you can
+    see thie robot on figure \ref{fig:robot}.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width = 3in]{RPP.png}
+        \caption{Image of the RPP Robot.}
+        \label{fig:robot}
+    \end{figure}
+
     \begin{table}[h]
         \begin{center}
             \begin{tabular}{c c c c c c}
@@ -91,8 +101,32 @@
         \captionof{table}{DH Table}
         \label{table:DH_table}
     \end{table}
+
         \subsection{Direct Kinematics}
+        
+        Once we have solve the homogene transform of the robot, we can obtain the equation of the direct kinematics.
+        This equations will help us to determine where is located the end effector with respect of the base.
+        
+    \begin{equation}
+	    x = L_2 * cos(\theta_1) + d_3 * sin(\theta_1)
+        \label{eq:x}
+    \end{equation}
+    \begin{equation}
+        y = L_2 * sin(\theta_1) - d_3 * cos(\theta_1) 
+        \label{eq:y}
+    \end{equation}
+    \begin{equation}
+        z = d_2
+        \label{eq:z}
+    \end{equation} 
+
+        As  we can observe, the reachability of this robot is determined by $d_2$, $d_3$ and $\theta_1$.
         \subsection{Inverse Kinematics}
+        Now that we have the equations \ref*{eq:x}, \ref*{eq:y} and \ref*{eq:z}. We need to solve for $d_2$, $d_3$ and $\theta_1$.
+        I first used the algebraic approach, that const on elevate both $x$ and $y$ to the second power and equal them to their corresponding equations.
+        Yo can see this process in
+        
+
 
     \section{Simulation}
     You can see the code for this simulation on appendix \ref{sec:matlabcode}.
@@ -230,6 +264,25 @@ a20 = d2i;
     %Copy code and paste here
 
     \label{sec:matlabcode}
+    \section{Inverse Kinematics procedure}
+    From equations \ref{eq:x}, and \ref{eq:y}, we can elevate both equation to the second power:
+    \begin{equation}
+        \begin{split}
+        x^2 + y^2 & = (L_2 * cos(\theta_1) + d_3 * sin(\theta_1))^2 + (L_2 * sin(\theta_1) - d_3 * cos(\theta_1))^2 \nonumber \nonumber \\
+	     & = L_2^2 * cos(\theta_1)^2 + 2*L_2*d_3*cos(\theta_1)*sin(\theta_1) + d_3^2 * sin(\theta_1)^2 \nonumber \\
+        & + L_2^2 * sin(\theta_1)^2 - 2*L_2*d_3*cos(\theta_1)*sin(\theta_1) + d_3^2 * cos(\theta_1)^2 \nonumber
+        \end{split}
+    \end{equation}
+    Reducing terms of the equation, we get:
+    \begin{equation} 
+        \begin{split}
+	        x^2 + y^2 = L_2^2 + d_3^2 \nonumber
+        \end{split}
+    \end{equation}
+    Solving for $d_3$, we obtain:
+    \begin{equation}
+        d_3 = \sqrt{x^2 + y^2 - L_2^2}
+    \end{equation}
     
 
 
